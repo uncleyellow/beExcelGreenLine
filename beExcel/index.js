@@ -17,8 +17,14 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 //     keyFile: './keyExcel/credential.json',
 //     scopes: SCOPES,
 // });
+// Chuyển GOOGLE_CREDENTIALS từ JSON string thành Object
+const serviceAccount = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+
 const auth = new GoogleAuth({
-    credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
+    credentials: {
+        client_email: serviceAccount.client_email,
+        private_key: serviceAccount.private_key.replace(/\\n/g, "\n"),  // Fix lỗi xuống dòng trong Private Key
+    },
     scopes: SCOPES,
 });
 const sheets = google.sheets({ version: 'v4', auth });
