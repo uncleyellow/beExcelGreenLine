@@ -19,7 +19,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 // });
 // Chuyển GOOGLE_CREDENTIALS từ JSON string thành Object
 const serviceAccount = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-
+console.log(serviceAccount)
 const auth = new GoogleAuth({
     credentials: {
         client_email: serviceAccount.client_email,
