@@ -1,0 +1,356 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Google Sheets API",
+    "version": "1.0.0",
+    "description": "API for interacting with Google Sheets"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "sheetId": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-sheet-id",
+        "description": "Google Sheet ID"
+      }
+    }
+  },
+  "security": [
+    {
+      "sheetId": []
+    }
+  ],
+  "paths": {
+    "/api/contact": {
+      "post": {
+        "summary": "Send contact form data to Google Sheet",
+        "description": "Adds a new contact entry to the Contact sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["fullName", "email", "message"],
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "description": "Full name of the contact"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email address of the contact"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Message from the contact"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Gửi thành công!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/contact_customer": {
+      "post": {
+        "summary": "Send customer contact form data to Google Sheet",
+        "description": "Adds a new customer contact entry to the Contact_customer sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["fullName", "email", "kind", "number", "message"],
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "description": "Full name of the customer"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email address of the customer"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "description": "Type of service"
+                  },
+                  "number": {
+                    "type": "string",
+                    "description": "Phone number"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Message from the customer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added customer contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Gửi thành công!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/news": {
+      "get": {
+        "summary": "Get news data from Google Sheet",
+        "description": "Retrieves all news entries from the News sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved news data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "imageUrl": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "shortContent": {
+                        "type": "string"
+                      },
+                      "fullContent": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No data found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/welcome": {
+      "get": {
+        "summary": "Get welcome data from Google Sheet",
+        "description": "Retrieves all welcome entries from the Welcome sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved welcome data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "shortContent": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No data found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/pricing": {
+      "get": {
+        "summary": "Get pricing data from Google Sheet",
+        "description": "Retrieves all pricing entries from the Pricing sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved pricing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      },
+                      "kind": {
+                        "type": "string"
+                      },
+                      "money": {
+                        "type": "string"
+                      },
+                      "notes": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No data found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/solutions": {
+      "get": {
+        "summary": "Get solutions data from Google Sheet",
+        "description": "Retrieves all solutions entries from the Solutions sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved solutions data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      },
+                      "kind": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No data found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/dashboard": {
+      "get": {
+        "summary": "Get dashboard data from Google Sheet",
+        "description": "Retrieves all dashboard entries from the Dashboard sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "container": {
+                        "type": "string"
+                      },
+                      "customer": {
+                        "type": "string"
+                      },
+                      "client": {
+                        "type": "string"
+                      },
+                      "rent": {
+                        "type": "string"
+                      },
+                      "support": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No data found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  }
+} 
