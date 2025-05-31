@@ -1762,6 +1762,34 @@
           "500": { "description": "Server error" }
         }
       }
+    },
+    "/api/totals": {
+      "get": {
+        "summary": "Get totals data",
+        "description": "Retrieves all totals entries from the Total sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved totals data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "chuyen": { "type": "string" },
+                      "duongBo": { "type": "string" },
+                      "duongTau": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      }
     }
   }
 } 

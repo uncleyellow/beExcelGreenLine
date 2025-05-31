@@ -958,6 +958,27 @@ app.delete('/api/news-eng/:id', async (req, res) => {
     }
 });
 
+
+// Totals APIs
+app.get('/api/totals', async (req, res) => {
+    try {
+        const rows = await handleSheetOperation('get', 'Total!A2:C');
+        if (!rows || rows.length === 0) {
+            return res.status(404).json({ message: 'Không có dữ liệu' });
+        }
+
+        const newsData = rows.map(row => ({
+            chuyen: row[0] || '',
+            duongBo: row[1] || '',
+            duongTau: row[2] || '',
+        }));
+
+        res.json(newsData);
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+        res.status(500).json({ error: 'Lỗi khi lấy dữ liệu' });
+    }
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
