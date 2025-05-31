@@ -28,8 +28,36 @@
   ],
   "paths": {
     "/api/contact": {
+      "get": {
+        "summary": "Get all contacts",
+        "description": "Retrieves all contact entries from the Contact sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "fullName": { "type": "string" },
+                      "email": { "type": "string" },
+                      "message": { "type": "string" },
+                      "createdAt": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
       "post": {
-        "summary": "Send contact form data to Google Sheet",
+        "summary": "Send contact form data",
         "description": "Adds a new contact entry to the Contact sheet",
         "requestBody": {
           "required": true,
@@ -39,19 +67,9 @@
                 "type": "object",
                 "required": ["fullName", "email", "message"],
                 "properties": {
-                  "fullName": {
-                    "type": "string",
-                    "description": "Full name of the contact"
-                  },
-                  "email": {
-                    "type": "string",
-                    "format": "email",
-                    "description": "Email address of the contact"
-                  },
-                  "message": {
-                    "type": "string",
-                    "description": "Message from the contact"
-                  }
+                  "fullName": { "type": "string", "description": "Full name of the contact" },
+                  "email": { "type": "string", "format": "email", "description": "Email address of the contact" },
+                  "message": { "type": "string", "description": "Message from the contact" }
                 }
               }
             }
@@ -65,24 +83,127 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Gửi thành công!"
+                    "message": { "type": "string", "example": "Gửi thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/contact/{id}": {
+      "put": {
+        "summary": "Update contact data",
+        "description": "Updates an existing contact entry in the Contact sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the contact to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["fullName", "email", "message"],
+                "properties": {
+                  "fullName": { "type": "string", "description": "Full name of the contact" },
+                  "email": { "type": "string", "format": "email", "description": "Email address of the contact" },
+                  "message": { "type": "string", "description": "Message from the contact" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Cập nhật thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Contact not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete contact data",
+        "description": "Deletes a contact entry from the Contact sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the contact to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Xóa thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Contact not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/contact_customer": {
+      "get": {
+        "summary": "Get all customer contacts",
+        "description": "Retrieves all customer contact entries from the Contact_customer sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved customer contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "fullName": { "type": "string" },
+                      "email": { "type": "string" },
+                      "kind": { "type": "string" },
+                      "number": { "type": "string" },
+                      "message": { "type": "string" },
+                      "createdAt": { "type": "string" }
                     }
                   }
                 }
               }
             }
           },
-          "500": {
-            "description": "Server error"
-          }
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
         }
-      }
-    },
-    "/api/contact_customer": {
+      },
       "post": {
-        "summary": "Send customer contact form data to Google Sheet",
+        "summary": "Send customer contact form data",
         "description": "Adds a new customer contact entry to the Contact_customer sheet",
         "requestBody": {
           "required": true,
@@ -92,27 +213,11 @@
                 "type": "object",
                 "required": ["fullName", "email", "kind", "number", "message"],
                 "properties": {
-                  "fullName": {
-                    "type": "string",
-                    "description": "Full name of the customer"
-                  },
-                  "email": {
-                    "type": "string",
-                    "format": "email",
-                    "description": "Email address of the customer"
-                  },
-                  "kind": {
-                    "type": "string",
-                    "description": "Type of service"
-                  },
-                  "number": {
-                    "type": "string",
-                    "description": "Phone number"
-                  },
-                  "message": {
-                    "type": "string",
-                    "description": "Message from the customer"
-                  }
+                  "fullName": { "type": "string", "description": "Full name of the customer" },
+                  "email": { "type": "string", "format": "email", "description": "Email address of the customer" },
+                  "kind": { "type": "string", "description": "Type of service" },
+                  "number": { "type": "string", "description": "Phone number" },
+                  "message": { "type": "string", "description": "Message from the customer" }
                 }
               }
             }
@@ -126,24 +231,99 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Gửi thành công!"
-                    }
+                    "message": { "type": "string", "example": "Gửi thành công!" }
                   }
                 }
               }
             }
           },
-          "500": {
-            "description": "Server error"
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/contact_customer/{id}": {
+      "put": {
+        "summary": "Update customer contact data",
+        "description": "Updates an existing customer contact entry in the Contact_customer sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the customer contact to update"
           }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["fullName", "email", "kind", "number", "message"],
+                "properties": {
+                  "fullName": { "type": "string", "description": "Full name of the customer" },
+                  "email": { "type": "string", "format": "email", "description": "Email address of the customer" },
+                  "kind": { "type": "string", "description": "Type of service" },
+                  "number": { "type": "string", "description": "Phone number" },
+                  "message": { "type": "string", "description": "Message from the customer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated customer contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Cập nhật thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Customer contact not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete customer contact data",
+        "description": "Deletes a customer contact entry from the Contact_customer sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the customer contact to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted customer contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Xóa thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Customer contact not found" },
+          "500": { "description": "Server error" }
         }
       }
     },
     "/api/news": {
       "get": {
-        "summary": "Get news data from Google Sheet",
+        "summary": "Get news data",
         "description": "Retrieves all news entries from the News sheet",
         "responses": {
           "200": {
@@ -155,42 +335,142 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "imageUrl": {
-                        "type": "string"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "shortContent": {
-                        "type": "string"
-                      },
-                      "fullContent": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string"
-                      }
+                      "id": { "type": "string" },
+                      "imageUrl": { "type": "string" },
+                      "title": { "type": "string" },
+                      "shortContent": { "type": "string" },
+                      "fullContent": { "type": "string" },
+                      "createdAt": { "type": "string" }
                     }
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "No data found"
-          },
-          "500": {
-            "description": "Server error"
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add news data",
+        "description": "Adds a new news entry to the News sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["imageUrl", "title", "shortContent", "fullContent"],
+                "properties": {
+                  "imageUrl": { "type": "string", "description": "URL of the news image" },
+                  "title": { "type": "string", "description": "Title of the news" },
+                  "shortContent": { "type": "string", "description": "Short content of the news" },
+                  "fullContent": { "type": "string", "description": "Full content of the news" }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added news data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Thêm thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/news/{id}": {
+      "put": {
+        "summary": "Update news data",
+        "description": "Updates an existing news entry in the News sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the news entry to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["imageUrl", "title", "shortContent", "fullContent"],
+                "properties": {
+                  "imageUrl": { "type": "string", "description": "URL of the news image" },
+                  "title": { "type": "string", "description": "Title of the news" },
+                  "shortContent": { "type": "string", "description": "Short content of the news" },
+                  "fullContent": { "type": "string", "description": "Full content of the news" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated news data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Cập nhật thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "News entry not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete news data",
+        "description": "Deletes a news entry from the News sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the news entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted news data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Xóa thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "News entry not found" },
+          "500": { "description": "Server error" }
         }
       }
     },
     "/api/welcome": {
       "get": {
-        "summary": "Get welcome data from Google Sheet",
+        "summary": "Get welcome data",
         "description": "Retrieves all welcome entries from the Welcome sheet",
         "responses": {
           "200": {
@@ -202,33 +482,135 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "shortContent": {
-                        "type": "string"
-                      },
-                      "title": {
-                        "type": "string"
-                      }
+                      "id": { "type": "string" },
+                      "shortContent": { "type": "string" },
+                      "title": { "type": "string" }
                     }
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "No data found"
-          },
-          "500": {
-            "description": "Server error"
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add welcome data",
+        "description": "Adds a new welcome entry to the Welcome sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["shortContent", "title"],
+                "properties": {
+                  "shortContent": { "type": "string", "description": "Short content of the welcome message" },
+                  "title": { "type": "string", "description": "Title of the welcome message" }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added welcome data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Thêm thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/welcome/{id}": {
+      "put": {
+        "summary": "Update welcome data",
+        "description": "Updates an existing welcome entry in the Welcome sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the welcome entry to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["shortContent", "title"],
+                "properties": {
+                  "shortContent": { "type": "string", "description": "Short content of the welcome message" },
+                  "title": { "type": "string", "description": "Title of the welcome message" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated welcome data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Cập nhật thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Welcome entry not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete welcome data",
+        "description": "Deletes a welcome entry from the Welcome sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the welcome entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted welcome data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Xóa thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Welcome entry not found" },
+          "500": { "description": "Server error" }
         }
       }
     },
     "/api/pricing": {
       "get": {
-        "summary": "Get pricing data from Google Sheet",
+        "summary": "Get pricing data",
         "description": "Retrieves all pricing entries from the Pricing sheet",
         "responses": {
           "200": {
@@ -240,40 +622,142 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "content": {
-                        "type": "string"
-                      },
-                      "kind": {
-                        "type": "string"
-                      },
-                      "money": {
-                        "type": "string"
-                      },
-                      "notes": {
-                        "type": "string"
-                      }
+                      "id": { "type": "string" },
+                      "content": { "type": "string" },
+                      "kind": { "type": "string" },
+                      "money": { "type": "string" },
+                      "notes": { "type": "string" }
                     }
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "No data found"
-          },
-          "500": {
-            "description": "Server error"
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add pricing data",
+        "description": "Adds a new pricing entry to the Pricing sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["content", "kind", "money", "notes"],
+                "properties": {
+                  "content": { "type": "string", "description": "Content of the pricing" },
+                  "kind": { "type": "string", "description": "Type of pricing" },
+                  "money": { "type": "string", "description": "Price amount" },
+                  "notes": { "type": "string", "description": "Additional notes" }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added pricing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Thêm thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/pricing/{id}": {
+      "put": {
+        "summary": "Update pricing data",
+        "description": "Updates an existing pricing entry in the Pricing sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the pricing entry to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["content", "kind", "money", "notes"],
+                "properties": {
+                  "content": { "type": "string", "description": "Content of the pricing" },
+                  "kind": { "type": "string", "description": "Type of pricing" },
+                  "money": { "type": "string", "description": "Price amount" },
+                  "notes": { "type": "string", "description": "Additional notes" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated pricing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Cập nhật thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Pricing entry not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete pricing data",
+        "description": "Deletes a pricing entry from the Pricing sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the pricing entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted pricing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Xóa thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Pricing entry not found" },
+          "500": { "description": "Server error" }
         }
       }
     },
     "/api/solutions": {
       "get": {
-        "summary": "Get solutions data from Google Sheet",
-        "description": "Retrieves all solutions entries from the Solutions sheet",
+        "summary": "Get solutions data",
+        "description": "Retrieves all solutions entries from the Services sheet",
         "responses": {
           "200": {
             "description": "Successfully retrieved solutions data",
@@ -284,33 +768,135 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "content": {
-                        "type": "string"
-                      },
-                      "kind": {
-                        "type": "string"
-                      }
+                      "id": { "type": "string" },
+                      "content": { "type": "string" },
+                      "kind": { "type": "string" }
                     }
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "No data found"
-          },
-          "500": {
-            "description": "Server error"
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add solutions data",
+        "description": "Adds a new solutions entry to the Services sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["content", "kind"],
+                "properties": {
+                  "content": { "type": "string", "description": "Content of the solution" },
+                  "kind": { "type": "string", "description": "Type of solution" }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added solutions data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Thêm thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/solutions/{id}": {
+      "put": {
+        "summary": "Update solutions data",
+        "description": "Updates an existing solutions entry in the Services sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the solution to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["content", "kind"],
+                "properties": {
+                  "content": { "type": "string", "description": "Content of the solution" },
+                  "kind": { "type": "string", "description": "Type of solution" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated solutions data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Cập nhật thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Solution not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete solutions data",
+        "description": "Deletes a solutions entry from the Services sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the solution to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted solutions data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Xóa thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Solution not found" },
+          "500": { "description": "Server error" }
         }
       }
     },
     "/api/dashboard": {
       "get": {
-        "summary": "Get dashboard data from Google Sheet",
+        "summary": "Get dashboard data",
         "description": "Retrieves all dashboard entries from the Dashboard sheet",
         "responses": {
           "200": {
@@ -322,33 +908,858 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "container": {
-                        "type": "string"
-                      },
-                      "customer": {
-                        "type": "string"
-                      },
-                      "client": {
-                        "type": "string"
-                      },
-                      "rent": {
-                        "type": "string"
-                      },
-                      "support": {
-                        "type": "string"
-                      }
+                      "container": { "type": "string" },
+                      "customer": { "type": "string" },
+                      "client": { "type": "string" },
+                      "rent": { "type": "string" },
+                      "support": { "type": "string" }
                     }
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "No data found"
-          },
-          "500": {
-            "description": "Server error"
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add dashboard data",
+        "description": "Adds a new dashboard entry to the Dashboard sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["container", "customer", "client", "rent", "support"],
+                "properties": {
+                  "container": { "type": "string", "description": "Container information" },
+                  "customer": { "type": "string", "description": "Customer information" },
+                  "client": { "type": "string", "description": "Client information" },
+                  "rent": { "type": "string", "description": "Rent information" },
+                  "support": { "type": "string", "description": "Support information" }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Thêm thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/dashboard/{id}": {
+      "put": {
+        "summary": "Update dashboard data",
+        "description": "Updates an existing dashboard entry in the Dashboard sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the dashboard entry to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["container", "customer", "client", "rent", "support"],
+                "properties": {
+                  "container": { "type": "string", "description": "Container information" },
+                  "customer": { "type": "string", "description": "Customer information" },
+                  "client": { "type": "string", "description": "Client information" },
+                  "rent": { "type": "string", "description": "Rent information" },
+                  "support": { "type": "string", "description": "Support information" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Cập nhật thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Dashboard entry not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete dashboard data",
+        "description": "Deletes a dashboard entry from the Dashboard sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the dashboard entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Xóa thành công!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Dashboard entry not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/welcome-eng": {
+      "get": {
+        "summary": "Get welcome data (English)",
+        "description": "Retrieves all welcome entries from the Welcome_ENG sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved welcome data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "shortContent": { "type": "string" },
+                      "title": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add welcome data (English)",
+        "description": "Adds a new welcome entry to the Welcome_ENG sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["shortContent", "title"],
+                "properties": {
+                  "shortContent": { "type": "string", "description": "Short content of the welcome message" },
+                  "title": { "type": "string", "description": "Title of the welcome message" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added welcome data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Added successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/welcome-eng/{id}": {
+      "put": {
+        "summary": "Update welcome data (English)",
+        "description": "Updates an existing welcome entry in the Welcome_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the welcome entry to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["shortContent", "title"],
+                "properties": {
+                  "shortContent": { "type": "string", "description": "Short content of the welcome message" },
+                  "title": { "type": "string", "description": "Title of the welcome message" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated welcome data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Updated successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Welcome entry not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete welcome data (English)",
+        "description": "Deletes a welcome entry from the Welcome_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the welcome entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted welcome data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Deleted successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Welcome entry not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/pricing-eng": {
+      "get": {
+        "summary": "Get pricing data (English)",
+        "description": "Retrieves all pricing entries from the Pricing_ENG sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved pricing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "content": { "type": "string" },
+                      "kind": { "type": "string" },
+                      "money": { "type": "string" },
+                      "notes": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add pricing data (English)",
+        "description": "Adds a new pricing entry to the Pricing_ENG sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["content", "kind", "money", "notes"],
+                "properties": {
+                  "content": { "type": "string", "description": "Content of the pricing" },
+                  "kind": { "type": "string", "description": "Type of pricing" },
+                  "money": { "type": "string", "description": "Price amount" },
+                  "notes": { "type": "string", "description": "Additional notes" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added pricing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Added successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/pricing-eng/{id}": {
+      "put": {
+        "summary": "Update pricing data (English)",
+        "description": "Updates an existing pricing entry in the Pricing_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the pricing entry to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["content", "kind", "money", "notes"],
+                "properties": {
+                  "content": { "type": "string", "description": "Content of the pricing" },
+                  "kind": { "type": "string", "description": "Type of pricing" },
+                  "money": { "type": "string", "description": "Price amount" },
+                  "notes": { "type": "string", "description": "Additional notes" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated pricing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Updated successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Pricing entry not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete pricing data (English)",
+        "description": "Deletes a pricing entry from the Pricing_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the pricing entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted pricing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Deleted successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Pricing entry not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/solutions-eng": {
+      "get": {
+        "summary": "Get solutions data (English)",
+        "description": "Retrieves all solutions entries from the Services_ENG sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved solutions data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "content": { "type": "string" },
+                      "kind": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add solutions data (English)",
+        "description": "Adds a new solutions entry to the Services_ENG sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["content", "kind"],
+                "properties": {
+                  "content": { "type": "string", "description": "Content of the solution" },
+                  "kind": { "type": "string", "description": "Type of solution" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added solutions data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Added successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/solutions-eng/{id}": {
+      "put": {
+        "summary": "Update solutions data (English)",
+        "description": "Updates an existing solutions entry in the Services_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the solution to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["content", "kind"],
+                "properties": {
+                  "content": { "type": "string", "description": "Content of the solution" },
+                  "kind": { "type": "string", "description": "Type of solution" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated solutions data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Updated successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Solution not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete solutions data (English)",
+        "description": "Deletes a solutions entry from the Services_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the solution to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted solutions data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Deleted successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Solution not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/dashboard-eng": {
+      "get": {
+        "summary": "Get dashboard data (English)",
+        "description": "Retrieves all dashboard entries from the Dashboard_ENG sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "container": { "type": "string" },
+                      "customer": { "type": "string" },
+                      "client": { "type": "string" },
+                      "rent": { "type": "string" },
+                      "support": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add dashboard data (English)",
+        "description": "Adds a new dashboard entry to the Dashboard_ENG sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["container", "customer", "client", "rent", "support"],
+                "properties": {
+                  "container": { "type": "string", "description": "Container information" },
+                  "customer": { "type": "string", "description": "Customer information" },
+                  "client": { "type": "string", "description": "Client information" },
+                  "rent": { "type": "string", "description": "Rent information" },
+                  "support": { "type": "string", "description": "Support information" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Added successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/dashboard-eng/{id}": {
+      "put": {
+        "summary": "Update dashboard data (English)",
+        "description": "Updates an existing dashboard entry in the Dashboard_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the dashboard entry to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["container", "customer", "client", "rent", "support"],
+                "properties": {
+                  "container": { "type": "string", "description": "Container information" },
+                  "customer": { "type": "string", "description": "Customer information" },
+                  "client": { "type": "string", "description": "Client information" },
+                  "rent": { "type": "string", "description": "Rent information" },
+                  "support": { "type": "string", "description": "Support information" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Updated successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Dashboard entry not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete dashboard data (English)",
+        "description": "Deletes a dashboard entry from the Dashboard_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the dashboard entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Deleted successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Dashboard entry not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/news-eng": {
+      "get": {
+        "summary": "Get news data (English)",
+        "description": "Retrieves all news entries from the News_ENG sheet",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved news data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "imageUrl": { "type": "string" },
+                      "title": { "type": "string" },
+                      "shortContent": { "type": "string" },
+                      "fullContent": { "type": "string" },
+                      "createdAt": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "No data found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Add news data (English)",
+        "description": "Adds a new news entry to the News_ENG sheet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["imageUrl", "title", "shortContent", "fullContent"],
+                "properties": {
+                  "imageUrl": { "type": "string", "description": "URL of the news image" },
+                  "title": { "type": "string", "description": "Title of the news" },
+                  "shortContent": { "type": "string", "description": "Short content of the news" },
+                  "fullContent": { "type": "string", "description": "Full content of the news" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added news data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Added successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/news-eng/{id}": {
+      "put": {
+        "summary": "Update news data (English)",
+        "description": "Updates an existing news entry in the News_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the news entry to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["imageUrl", "title", "shortContent", "fullContent"],
+                "properties": {
+                  "imageUrl": { "type": "string", "description": "URL of the news image" },
+                  "title": { "type": "string", "description": "Title of the news" },
+                  "shortContent": { "type": "string", "description": "Short content of the news" },
+                  "fullContent": { "type": "string", "description": "Full content of the news" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated news data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Updated successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "News entry not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete news data (English)",
+        "description": "Deletes a news entry from the News_ENG sheet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the news entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted news data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Deleted successfully!" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "News entry not found" },
+          "500": { "description": "Server error" }
         }
       }
     }
