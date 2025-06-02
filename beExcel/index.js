@@ -980,7 +980,13 @@ app.get('/api/totals', async (req, res) => {
     }
 });
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
-    console.log(`📚 API Documentation available at http://localhost:${PORT}/api-docs`);
+const HOST = '0.0.0.0'; // Listen on all network interfaces
+// app.listen(PORT, () => {
+//     console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
+//     console.log(`📚 API Documentation available at http://localhost:${PORT}/api-docs`);
+// });
+
+app.listen(PORT, HOST, () => {
+    console.log(`✅ Server đang chạy tại http://${HOST}:${PORT}`);
+    console.log(`📚 API Documentation available at http://${HOST}:${PORT}/api-docs`);
 });
