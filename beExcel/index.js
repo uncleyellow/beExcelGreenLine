@@ -151,11 +151,11 @@ app.delete('/api/contact/:id', async (req, res) => {
 // Contact Customer APIs
 app.post('/api/contact_customer', async (req, res) => {
     try {
-        const { fullName, email, kind, number, message } = req.body;
+        const { fullName, email, phone,services,kind, number, message } = req.body;
         const id = uuidv4();
         const createdAt = new Date().toISOString();
 
-        await handleSheetOperation('append', 'Contact_customer!A:G', [id, fullName, email, kind, number, message, createdAt]);
+        await handleSheetOperation('append', 'Contact_customer!A:I', [id, fullName, email, phone,services,kind, number, message, createdAt]);
         res.json({ message: 'Gửi thành công!' });
     } catch (error) {
         console.error(error);
@@ -174,10 +174,12 @@ app.get('/api/contact_customer', async (req, res) => {
             id: row[0] || '',
             fullName: row[1] || '',
             email: row[2] || '',
-            kind: row[3] || '',
-            number: row[4] || '',
-            message: row[5] || '',
-            createdAt: row[6] || '',
+            phone: row[3] || '',
+            services: row[4] || '',
+            kind: row[5] || '',
+            number: row[6] || '',
+            message: row[7] || '',
+            createdAt: row[8] || '',
         }));
 
         res.json(customers);
@@ -190,7 +192,7 @@ app.get('/api/contact_customer', async (req, res) => {
 app.put('/api/contact_customer/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { fullName, email, kind, number, message } = req.body;
+        const { fullName, email,phone,services, kind, number, message } = req.body;
         const rows = await handleSheetOperation('get', 'Contact_customer!A:G');
         const rowIndex = rows.findIndex(row => row[0] === id);
         
@@ -198,7 +200,7 @@ app.put('/api/contact_customer/:id', async (req, res) => {
             return res.status(404).json({ message: 'Không tìm thấy dữ liệu' });
         }
 
-        const updatedRow = [id, fullName, email, kind, number, message, rows[rowIndex][6]];
+        const updatedRow = [id, fullName, email,phone,services, kind, number, message, rows[rowIndex][6]];
         await handleSheetOperation('update', null, updatedRow, `Contact_customer!A${rowIndex + 1}:G${rowIndex + 1}`);
         res.json({ message: 'Cập nhật thành công!' });
     } catch (error) {
@@ -210,7 +212,7 @@ app.put('/api/contact_customer/:id', async (req, res) => {
 app.delete('/api/contact_customer/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const rows = await handleSheetOperation('get', 'Contact_customer!A:G');
+        const rows = await handleSheetOperation('get', 'Contact_customer!A:I');
         const rowIndex = rows.findIndex(row => row[0] === id);
         
         if (rowIndex === -1) {
