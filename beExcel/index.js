@@ -11,7 +11,7 @@ const swaggerDocument = require('./swagger.json');
 const app = express();
 // app.use(cors());
 app.use(cors({
-    origin: ['http://localhost:4200', 'https://your-production-domain.com'],
+    origin: ['http://localhost:4200', 'https://beexcelgreenline.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
