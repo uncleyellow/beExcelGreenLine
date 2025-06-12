@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
+      "url": "http://beexcelgreenline.onrender.com",
       "description": "Local development server"
     }
   ],
