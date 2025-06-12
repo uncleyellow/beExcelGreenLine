@@ -9,7 +9,17 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
 const app = express();
-app.use(cors());
+
+// CORS configuration
+const corsOptions = {
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    credentials: true, // Allow credentials
+    maxAge: 86400 // Cache preflight request for 24 hours
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // Swagger UI setup
