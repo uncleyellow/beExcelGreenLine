@@ -980,19 +980,19 @@ app.delete('/api/news-eng/:id', async (req, res) => {
     }
 });
 
-
 // Totals APIs
 app.get('/api/totals', async (req, res) => {
     try {
-        const rows = await handleSheetOperation('get', 'Total!A2:C');
+        const rows = await handleSheetOperation('get', 'LCL!A4:E');
         if (!rows || rows.length === 0) {
             return res.status(404).json({ message: 'Không có dữ liệu' });
         }
 
         const newsData = rows.map(row => ({
-            chuyen: row[0] || '',
-            duongBo: row[1] || '',
-            duongTau: row[2] || '',
+            STT: row[0] || '',
+            ga: row[1] || '',
+            viTriLayNhanHang: row[2] || '',
+            soTien: row[4] || '',
         }));
 
         res.json(newsData);
