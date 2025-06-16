@@ -992,6 +992,7 @@ app.get('/api/totals', async (req, res) => {
             STT: row[0] || '',
             ga: row[1] || '',
             viTriLayNhanHang: row[2] || '',
+            loaiCont:row[3] || '',
             soTien: row[4] || '',
         }));
 
