@@ -1028,6 +1028,30 @@ app.get('/api/flc', async (req, res) => {
     }
 });
 
+// FLC APIs
+app.get('/api/duongBo', async (req, res) => {
+    try {
+        const rows = await handleSheetOperation('get', 'DuongBo!A2:E');
+        if (!rows || rows.length === 0) {
+            return res.status(404).json({ message: 'Không có dữ liệu' });
+        }
+
+        const newsData = rows.map(row => ({
+            STT: row[0] || '',
+            ga: row[1] || '',
+            viTriLayNhanHang: row[2] || '',
+            loaiCont :row[3] || '',
+            donViTinh: row[4] || '',
+        }));
+
+        res.json(newsData);
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+        res.status(500).json({ error: 'Lỗi khi lấy dữ liệu' });
+    }
+});
+
+
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0'; // Listen on all network interfaces
 // app.listen(PORT, () => {
