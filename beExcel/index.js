@@ -983,7 +983,7 @@ app.delete('/api/news-eng/:id', async (req, res) => {
 // Totals APIs
 app.get('/api/totals', async (req, res) => {
     try {
-        const rows = await handleSheetOperation('get', 'LCL!A4:E');
+        const rows = await handleSheetOperation('get', 'LCL!A4:F');
         if (!rows || rows.length === 0) {
             return res.status(404).json({ message: 'Không có dữ liệu' });
         }
@@ -994,6 +994,7 @@ app.get('/api/totals', async (req, res) => {
             viTriLayNhanHang: row[2] || '',
             loaiCont:row[3] || '',
             soTien: row[4] || '',
+            ngayVanChuyen: row[5] || '',
         }));
 
         res.json(newsData);
