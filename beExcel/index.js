@@ -1008,7 +1008,7 @@ app.get('/api/totals', async (req, res) => {
 // FLC APIs
 app.get('/api/flc', async (req, res) => {
     try {
-        const rows = await handleSheetOperation('get', 'FLC!A2:G');
+        const rows = await handleSheetOperation('get', 'FLC!A2:H');
         if (!rows || rows.length === 0) {
             return res.status(404).json({ message: 'Không có dữ liệu' });
         }
@@ -1020,6 +1020,8 @@ app.get('/api/flc', async (req, res) => {
             nguyenToa :row[3] || '',
             dongKg: row[4] || '',
             metKhoi: row[5] || '',
+            notes: row[6] || '',
+            ngayVanChuyen: row[7] || '',
         }));
 
         res.json(newsData);
